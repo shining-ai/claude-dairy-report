@@ -1,0 +1,25 @@
+# dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+build/
+dist/
+
+# environment
+.env
+.env.local
+.env.*.local
+
+# misc
+.DS_Store
+*.log
+npm-debug.log*
+
+# generated
+generated/
+prisma/migrations/
+
+# coverage
+coverage/
