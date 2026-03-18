@@ -23,3 +23,9 @@ prisma/migrations/
 
 # coverage
 coverage/
+
+# TypeScript build info
+tsconfig.tsbuildinfo
+
+# Next.js generated files
+next-env.d.ts
