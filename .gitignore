@@ -17,9 +17,14 @@ dist/
 *.log
 npm-debug.log*
 
-# generated
-generated/
-prisma/migrations/
+# TypeScript build info
+tsconfig.tsbuildinfo
+
+# Next.js generated files
+next-env.d.ts
+
+# Prisma generated client (regenerated via `npm run db:generate`)
+/src/generated/
 
 # coverage
 coverage/
