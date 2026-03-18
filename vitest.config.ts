@@ -3,7 +3,8 @@ import path from 'path';
 
 export default defineConfig({
   test: {
-    environment: 'jsdom',
+    environment: 'node',
+    environmentMatchGlobs: [['src/test/components/**', 'jsdom']],
     globals: true,
     setupFiles: ['./src/test/setup.ts'],
     coverage: {

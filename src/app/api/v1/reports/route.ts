@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
   if (!user) {
     return NextResponse.json(
       { error: { code: 'UNAUTHORIZED', message: '認証が必要です' } },
-      { status: 401 },
+      { status: 401 }
     );
   }
 
@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
   if (!parsed.success) {
     return NextResponse.json(
       { error: { code: 'VALIDATION_ERROR', message: '入力値が正しくありません' } },
-      { status: 422 },
+      { status: 422 }
     );
   }
 
@@ -88,14 +88,14 @@ export async function POST(req: NextRequest) {
   if (!user) {
     return NextResponse.json(
       { error: { code: 'UNAUTHORIZED', message: '認証が必要です' } },
-      { status: 401 },
+      { status: 401 }
     );
   }
 
   if (user.role !== 'sales') {
     return NextResponse.json(
       { error: { code: 'FORBIDDEN', message: '権限がありません' } },
-      { status: 403 },
+      { status: 403 }
     );
   }
 
@@ -105,7 +105,7 @@ export async function POST(req: NextRequest) {
   } catch {
     return NextResponse.json(
       { error: { code: 'INVALID_JSON', message: 'リクエストボディが不正です' } },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -113,20 +113,18 @@ export async function POST(req: NextRequest) {
   if (!parsed.success) {
     return NextResponse.json(
       { error: { code: 'VALIDATION_ERROR', message: '入力値が正しくありません' } },
-      { status: 422 },
+      { status: 422 }
     );
   }
 
   const { report_date, problem, plan, visit_records } = parsed.data;
 
-  // Validate: no future dates
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const reportDate = new Date(report_date);
-  if (reportDate > today) {
+  // Validate: no future dates (compare as UTC date strings)
+  const todayUtc = new Date().toISOString().slice(0, 10);
+  if (report_date > todayUtc) {
     return NextResponse.json(
       { error: { code: 'VALIDATION_ERROR', message: '未来の日付では日報を作成できません' } },
-      { status: 422 },
+      { status: 422 }
     );
   }
 
@@ -137,7 +135,7 @@ export async function POST(req: NextRequest) {
   if (existing) {
     return NextResponse.json(
       { error: { code: 'DUPLICATE_REPORT', message: '指定日付の日報は既に存在します' } },
-      { status: 409 },
+      { status: 409 }
     );
   }
 
@@ -153,13 +151,13 @@ export async function POST(req: NextRequest) {
       if (!c) {
         return NextResponse.json(
           { error: { code: 'VALIDATION_ERROR', message: `顧客ID ${id} は存在しません` } },
-          { status: 422 },
+          { status: 422 }
         );
       }
       if (!c.isActive) {
         return NextResponse.json(
           { error: { code: 'VALIDATION_ERROR', message: `顧客ID ${id} は無効化されています` } },
-          { status: 422 },
+          { status: 422 }
         );
       }
     }
