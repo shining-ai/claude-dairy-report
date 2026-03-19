@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { AUTH_COOKIE } from '@/lib/auth/getUser';
+import { AUTH_COOKIE } from '@/lib/auth/constants';
 
 type Props = {
   name: string;

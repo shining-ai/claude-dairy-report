@@ -1,8 +1,10 @@
 import 'dotenv/config';
+import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '../src/generated/prisma/client';
 import bcrypt from 'bcryptjs';
 
-const prisma = new PrismaClient();
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
+const prisma = new PrismaClient({ adapter });
 
 async function main() {
   console.log('🌱 シードデータを投入します...');
@@ -51,7 +53,7 @@ async function main() {
     },
   });
 
-  const _inactiveUser = await prisma.user.upsert({
+  await prisma.user.upsert({
     where: { email: 'inactive@example.com' },
     update: {},
     create: {
@@ -64,7 +66,11 @@ async function main() {
     },
   });
 
-  console.log('✅ ユーザー作成完了:', { manager: manager.name, sales1: sales1.name, sales2: sales2.name });
+  console.log('✅ ユーザー作成完了:', {
+    manager: manager.name,
+    sales1: sales1.name,
+    sales2: sales2.name,
+  });
 
   // ============================================================
   // 顧客作成
@@ -105,7 +111,7 @@ async function main() {
     },
   });
 
-  const _inactiveCustomer = await prisma.customer.upsert({
+  await prisma.customer.upsert({
     where: { id: 4 },
     update: {},
     create: {
@@ -117,7 +123,11 @@ async function main() {
     },
   });
 
-  console.log('✅ 顧客作成完了:', { A: customerA.companyName, B: customerB.companyName, C: customerC.companyName });
+  console.log('✅ 顧客作成完了:', {
+    A: customerA.companyName,
+    B: customerB.companyName,
+    C: customerC.companyName,
+  });
 
   // ============================================================
   // 日報作成（山田さん — 提出済み）
@@ -142,7 +152,8 @@ async function main() {
           {
             customerId: customerA.id,
             visitedAt: '10:00',
-            visitContent: '新製品の提案を行った。担当者は興味を示していたが、予算の関係で来月再訪を希望とのこと。',
+            visitContent:
+              '新製品の提案を行った。担当者は興味を示していたが、予算の関係で来月再訪を希望とのこと。',
           },
           {
             customerId: customerB.id,
@@ -236,7 +247,8 @@ async function main() {
     data: {
       dailyReportId: report1.id,
       userId: manager.id,
-      content: 'A社については私からも経営層にアプローチしてみます。引き続き粘り強く対応をお願いします。',
+      content:
+        'A社については私からも経営層にアプローチしてみます。引き続き粘り強く対応をお願いします。',
     },
   });
 

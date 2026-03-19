@@ -1,7 +1,8 @@
 import { cookies } from 'next/headers';
 import { verifyJwt, type JwtPayload } from './jwt';
+import { AUTH_COOKIE } from './constants';
 
-export const AUTH_COOKIE = 'auth_token';
+export { AUTH_COOKIE };
 
 /**
  * Server-side helper: reads the auth cookie and returns the decoded user.

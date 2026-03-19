@@ -29,7 +29,7 @@
 ### 前提条件
 
 - Node.js 20+
-- PostgreSQL
+- Docker（PostgreSQL の起動に使用）
 
 ### インストール
 
@@ -39,37 +39,50 @@ npm install
 
 ### 環境変数
 
-`.env` ファイルをプロジェクトルートに作成します。
-
-```env
-DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE"
-JWT_SECRET="your-secret-key"
-```
-
-### DB セットアップ
+`.env.example` をコピーして `.env` を作成します。
 
 ```bash
-# マイグレーション実行
-npm run db:migrate
-
-# 初期データ投入
-npm run db:seed
+cp .env.example .env
 ```
 
-### 開発サーバー起動
+ローカル開発ではデフォルト値のままで動作します。
+
+### 初回セットアップ
 
 ```bash
+# 1. PostgreSQL コンテナを起動
+docker compose up -d
+
+# 2. DBマイグレーション実行
+npx prisma migrate dev --name init
+
+# 3. 初期データ投入
+npx tsx prisma/seed.ts
+
+# 4. 開発サーバー起動
 npm run dev
 ```
 
 http://localhost:3000 でアクセスできます。
+
+### 2回目以降の起動・停止
+
+```bash
+# 起動
+docker compose up -d
+npm run dev
+
+# 停止
+docker compose stop
+```
 
 ### シードデータのログイン情報
 
 | ロール | メールアドレス      | パスワード  |
 | ------ | ------------------- | ----------- |
 | 上長   | manager@example.com | password123 |
-| 営業   | sales@example.com   | password123 |
+| 営業   | yamada@example.com  | password123 |
+| 営業   | tanaka@example.com  | password123 |
 
 ## コマンド一覧
 
